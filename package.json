@@ -1,0 +1,17 @@
+{
+  "name": "github-tag-list",
+  "version": "1.0.0",
+  "description": "List GitHub repository tags from the API",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
