@@ -84,3 +84,48 @@ git tag -a v1.2.3 -m "Release v1.2.3"
 # enviar tag específica
 git push origin v1.2.3
 ```
+
+## Fluxo usado para esta feature (exemplo prático)
+
+Os passos que eu executei para integrar a branch `feature/listing-tags` na `main` e criar a tag `1.0.1` foram:
+
+1. Buscar atualizações do remoto:
+
+```bash
+git fetch origin
+```
+
+2. Alternar para a branch principal e atualizá-la:
+
+```bash
+git checkout main
+git pull origin main
+```
+
+3. Mesclar a branch de feature na `main` (merge sem fast-forward, com mensagem):
+
+```bash
+git merge --no-ff feature/listing-tags -m "Merge feature/listing-tags -> main"
+```
+
+4. Criar uma tag anotada para a release:
+
+```bash
+git tag -a 1.0.1 -m "Release 1.0.1"
+```
+
+5. Enviar `main` e a nova tag para o repositório remoto:
+
+```bash
+git push origin main
+git push origin refs/tags/1.0.1
+```
+
+6. Criar o Pull Request (opcional quando já mesclado):
+
+- Se você ainda não mesclou, crie o PR no GitHub entre `feature/listing-tags` → `main` e aguarde revisão.
+- Se preferir criar o PR via navegador use este link (substitui `feature/listing-tags` e `main` conforme necessário):
+
+https://github.com/benparvar/github-tag-list/compare/main...feature/listing-tags?expand=1
+
+Observação: neste repositório eu já mesclei localmente e empurrei a `main` e a tag `1.0.1`, portanto um PR já não era necessário — se quiser reverter isso e abrir um PR antes do merge, diga e eu invoco o fluxo reverso.
