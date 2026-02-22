@@ -14,7 +14,7 @@ Run the CLI with owner and repo:
 ```bash
 node src/index.js <owner> <repo>
 # example:
-node src/index.js octocat Hello-World
+node src/index.js benparvar github-tag-list
 ```
 
 The module also exports `fetchRepoTags(owner, repo, options)` which returns an array of tags: `{ name, commitSha }`.
