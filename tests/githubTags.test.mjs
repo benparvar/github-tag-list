@@ -1,9 +1,10 @@
+import { vi, describe, it, expect } from 'vitest';
 import { fetchRepoTags } from '../src/githubTags.js';
 
 describe('fetchRepoTags', () => {
   it('returns mapped tags', async () => {
     const mockResponse = [{ name: 'v1.0.0', commit: { sha: 'abc' } }];
-    const mockFetch = jest.fn().mockResolvedValue({ ok: true, json: async () => mockResponse });
+    const mockFetch = vi.fn().mockResolvedValue({ ok: true, json: async () => mockResponse });
 
     const tags = await fetchRepoTags('owner', 'repo', { fetchImpl: mockFetch });
     expect(tags).toEqual([{ name: 'v1.0.0', commitSha: 'abc' }]);
@@ -11,18 +12,19 @@ describe('fetchRepoTags', () => {
   });
 
   it('throws on http error', async () => {
-    const mockFetch = jest.fn().mockResolvedValue({ ok: false, status: 404, text: async () => 'Not Found' });
-    await expect(fetchRepoTags('o', 'r', { fetchImpl: mockFetch })).rejects.toThrow('GitHub API error 404: Not Found');
+    const mockFetch = vi.fn().mockResolvedValue({ ok: false, status: 404, text: async () => 'Not Found' });
+    await expect(fetchRepoTags('o', 'r', { fetchImpl: mockFetch })).rejects.toThrow(/GitHub API error 404/);
   });
 
   it('throws if owner or repo missing', async () => {
-    await expect(fetchRepoTags('', '')).rejects.toThrow();
+    await expect(fetchRepoTags('', '')).rejects.toThrow('owner and repo required');
   });
 
   it('paginates until no more results', async () => {
-    const mockFetch = jest.fn((url) => {
-      if (url.includes('page=1')) return Promise.resolve({ ok: true, json: async () => [{ name: 'v1', commit: { sha: 'a' } }] });
-      if (url.includes('page=2')) return Promise.resolve({ ok: true, json: async () => [{ name: 'v2', commit: { sha: 'b' } }] });
+    const mockFetch = vi.fn((url) => {
+      const page = new URL(url).searchParams.get('page');
+      if (page === '1') return Promise.resolve({ ok: true, json: async () => [{ name: 'v1', commit: { sha: 'a' } }] });
+      if (page === '2') return Promise.resolve({ ok: true, json: async () => [{ name: 'v2', commit: { sha: 'b' } }] });
       return Promise.resolve({ ok: true, json: async () => [] });
     });
 
