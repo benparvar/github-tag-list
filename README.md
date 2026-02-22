@@ -9,12 +9,18 @@ npm install
 
 ## Usage
 
-Run the CLI with owner and repo:
+Run the CLI with owner and repo. Use `--latest` (or `-l`) to print the latest release:
 
 ```bash
+# list tags
 node src/index.js <owner> <repo>
 # example:
-node src/index.js octocat Hello-World
+node src/index.js benparvar github-tag-list
+
+# print latest release JSON
+node src/index.js --latest <owner> <repo>
+# example:
+node src/index.js --latest benparvar github-tag-list
 ```
 
 The module also exports `fetchRepoTags(owner, repo, options)` which returns an array of tags: `{ name, commitSha }`.
